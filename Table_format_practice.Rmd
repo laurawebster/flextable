@@ -1,0 +1,62 @@
+---
+title: "Flextable formatting"
+author: "Laura Webster"
+date: "03/12/2019"
+output:
+  word_document:
+    toc: yes
+  pdf_document:
+    number_sections: no
+    toc: yes
+---
+
+```{r setup, include = FALSE, results = 'hide', warning = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.pos = 'H'
+)
+
+library(readxl)
+library(data.table)
+library(flextable)
+library(huxtable)
+library(knitr)
+library(officer)
+library(kableExtra)
+suppressPackageStartupMessages(library(ggplot2))
+#library(cowplot)
+
+
+```
+
+> this is how to print a flextable in a R Markdown document
+    
+
+```{r}
+data <- fread("X:/ScHARR/PR_Disease_Risk_TA/Code/Table_formatting/dist_effects_yll.csv", header = TRUE)
+data <- flextable(data)
+data <- merge_v(data, j = c("Sex"))
+data <- colformat_int(data, j = c("2035", "2091"),
+      big.mark = ",", na_str = "", prefix = "", suffix = "")
+
+data <- autofit(data)
+
+
+data <- theme_vanilla(data)
+fix_border_issues(data)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+

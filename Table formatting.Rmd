@@ -1,0 +1,64 @@
+---
+title: "flextable formatting"
+author: "Laura Webster"
+date: "03/12/2019"
+output:
+  word_document:
+    toc: yes
+  pdf_document:
+    number_sections: no
+    toc: yes
+---
+
+```{r setup, include = FALSE, results = 'hide', warning = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.pos = 'H'
+)
+
+library(readxl)
+library(data.table)
+library(flextable)
+library(huxtable)
+library(knitr)
+library(officer)
+library(kableExtra)
+suppressPackageStartupMessages(library(ggplot2))
+#library(cowplot)
+
+
+```
+
+> this is how to print a flextable in a R Markdown document
+    
+
+```{r}
+ft <- head(mtcars)
+col_order <- c("cyl", "gear")
+ft <- ft[, col_order]
+ft <- setorder(ft, cyl, gear)
+setDT(ft)
+ft <- ft[ , cyl := cyl *30000]
+ft <- flextable(ft)
+ft <- autofit(ft)
+ft <- merge_v(ft, j = c("cyl", "gear"))
+ft <- colformat_int(ft, j = c("cyl"),
+      big.mark = ",", na_str = "", prefix = "", suffix = "")
+ft <- theme_vanilla(ft)
+fix_border_issues(ft)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
