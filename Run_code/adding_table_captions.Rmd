@@ -1,0 +1,63 @@
+---
+title: "flextable formatting"
+author: "Laura Webster"
+date: "03/12/2019"
+output:
+  word_document:
+    toc: no
+  pdf_document:
+    number_sections: no
+    toc: no
+---
+  
+```{r setup, include = FALSE, results = 'hide', warning = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.pos = 'H'
+)
+
+library(readxl)
+library(data.table)
+library(flextable)
+library(huxtable)
+library(knitr)
+library(officer)
+library(kableExtra)
+suppressPackageStartupMessages(library(ggplot2))
+#library(cowplot)
+
+
+```
+
+This creates a new document, but automatically numbers captions. 
+
+```{r tab2}
+
+
+ft <- regulartable(head(iris)) # create flextable
+str <- paste0(' REF ft \\h ')  # create string to be used as reference to future bookmark
+
+doc <- read_docx() %>%
+  body_add_par('This is my caption' , style = 'Normal') %>% # add caption
+  slip_in_seqfield(str = "SEQ Table \\@ arabic",           
+                   style = 'Default Paragraph Font', 
+                   pos = "before") %>% # add number for table
+  body_bookmark('ft') %>%   # add bookmark on the number
+  slip_in_text("Table ", 
+               style = 'Default Paragraph Font', 
+               pos = "before") %>% # add the word 'table'
+  body_add_flextable(value = ft, align = 'left') %>% # add flextable
+  body_add_break() %>%  # insert a break (optional)
+  slip_in_text('As you can see in Table', 
+               style = 'Default Paragraph Font', 
+               pos = 'after') %>% # add the text you want before the table reference
+  slip_in_seqfield(str = str,  
+                   style = 'Default Paragraph Font', 
+                   pos = 'after') %>% # add the reference to the table you just added
+  slip_in_text(', there are a lot of iris flowers.', 
+               style = 'Default Paragraph Font', 
+               pos = 'after') %>%
+  print('Iris_test.docx') # print
+```
+

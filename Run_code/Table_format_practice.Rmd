@@ -17,24 +17,24 @@ knitr::opts_chunk$set(
   fig.pos = 'H'
 )
 
-library(readxl)
-library(data.table)
-library(flextable)
-library(huxtable)
-library(knitr)
-library(officer)
-library(kableExtra)
+#library(readxl)
+suppressPackageStartupMessages(library(data.table))
+suppressPackageStartupMessages(library(flextable))
+suppressPackageStartupMessages(library(huxtable))
+suppressPackageStartupMessages(library(knitr))
+suppressPackageStartupMessages(library(officer))
+suppressPackageStartupMessages(library(kableExtra))
 suppressPackageStartupMessages(library(ggplot2))
-#library(cowplot)
+suppressPackageStartupMessages(library(cowplot))
 
 
 ```
 
-> this is how to print a flextable in a R Markdown document
+> this is how to print a flextable in an R Markdown document
     
 
 ```{r}
-data <- fread("X:/ScHARR/PR_Disease_Risk_TA/Code/Table_formatting/dist_effects_yll.csv", header = TRUE)
+data <- fread("Input/dist_effects_yll.csv", header = TRUE)
 data <- flextable(data)
 data <- merge_v(data, j = c("Sex"))
 data <- colformat_int(data, j = c("2035", "2091"),
@@ -44,7 +44,10 @@ data <- autofit(data)
 
 
 data <- theme_vanilla(data)
-fix_border_issues(data)
+data
+#data <- fix_border_issues(data)
+#set_caption(data, "caption")
+
 
 ```
 

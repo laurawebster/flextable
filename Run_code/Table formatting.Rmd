@@ -4,10 +4,10 @@ author: "Laura Webster"
 date: "03/12/2019"
 output:
   word_document:
-    toc: yes
+    toc: no
   pdf_document:
     number_sections: no
-    toc: yes
+    toc: no
 ---
 
 ```{r setup, include = FALSE, results = 'hide', warning = FALSE}
@@ -30,35 +30,39 @@ suppressPackageStartupMessages(library(ggplot2))
 
 ```
 
-> this is how to print a flextable in a R Markdown document
+> this is how to print a flextable in an R Markdown document
     
 
-```{r}
+```{r tab1}
 ft <- head(mtcars)
 col_order <- c("cyl", "gear")
 ft <- ft[, col_order]
 ft <- setorder(ft, cyl, gear)
 setDT(ft)
 ft <- ft[ , cyl := cyl *30000]
+
 ft <- flextable(ft)
-ft <- autofit(ft)
+ft <- autofit(ft, add_w = 4)
+
 ft <- merge_v(ft, j = c("cyl", "gear"))
 ft <- colformat_int(ft, j = c("cyl"),
       big.mark = ",", na_str = "", prefix = "", suffix = "")
 ft <- theme_vanilla(ft)
-fix_border_issues(ft)
+ft <- fix_border_issues(ft)
+
+std_border = fp_border(color = "black", width = 1)
+ft <- border_inner_v(ft, border = std_border)
+
+ft <- align_text_col(ft, align = "left")
+
+# Label table with a caption
+flextable::set_caption(ft, "Table 1. mtcars")
+
+
+
+
 
 ```
-
-
-
-
-
-
-
-
-
-
 
 
 

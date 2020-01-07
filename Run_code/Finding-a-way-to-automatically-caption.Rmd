@@ -1,0 +1,85 @@
+---
+title: "Automatically captioning tables when using flextable"
+author: "Laura Webster"
+date: "07/01/2020"
+output:
+  word_document:
+    toc: no
+  pdf_document:
+    number_sections: no
+    toc: no
+---
+  
+```{r setup, include = FALSE, results = 'hide', warning = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.pos = 'H'
+)
+
+library(readxl)
+library(data.table)
+library(flextable)
+library(huxtable)
+library(knitr)
+library(officer)
+library(kableExtra)
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(captioner))
+#library(cowplot)
+
+
+```
+
+Help file: https://cran.r-project.org/web/packages/captioner/vignettes/using_captioner.html
+
+
+```{r table cap,  include = FALSE, results = 'hide', warning = FALSE}
+# Using the captioner package. 
+
+table_nums <- captioner(prefix = "Table")
+
+```
+
+`r table_nums("mtcars", display = "cite")` shows the mtcars data. 
+
+
+`r table_nums(name = "mtcars", caption = "mtcars data.")`
+```{r table1, eval = T, out.extra='', warning = FALSE, echo = F, cache = T}
+ft <- head(mtcars)
+col_order <- c("cyl", "gear")
+ft <- ft[, col_order]
+ft <- setorder(ft, cyl, gear)
+setDT(ft)
+ft <- ft[ , cyl := cyl *30000]
+
+ft <- flextable(ft)
+ft <- autofit(ft, add_w = 4)
+
+ft <- merge_v(ft, j = c("cyl", "gear"))
+ft <- colformat_int(ft, j = c("cyl"),
+      big.mark = ",", na_str = "", prefix = "", suffix = "")
+ft <- theme_vanilla(ft)
+ft <- fix_border_issues(ft)
+
+std_border = fp_border(color = "black", width = 1)
+ft <- border_inner_v(ft, border = std_border)
+
+ft <- align_text_col(ft, align = "left")
+
+ft
+# Label table with a caption
+#flextable::set_caption(ft, "Table 1. mtcars")
+
+
+```
+  
+
+
+`r table_nums(name = "iris", caption = "iris data.")`
+
+```{r table2, eval = T, out.extra='', warning = FALSE, echo=F, cache = T}
+ft <- regulartable(head(iris)) 
+ft <- autofit(ft, add_w = 2)
+align_text_col(ft, align = "left")
+```
