@@ -1,0 +1,10 @@
+base
+readxl
+data.table
+flextable
+huxtable
+knitr
+officer
+kableExtra
+ggplot2
+captioner

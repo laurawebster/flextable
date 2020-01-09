@@ -31,6 +31,8 @@ suppressPackageStartupMessages(library(captioner))
 
 ```
 
+Using the package captioner allows the automatic captioning of tables using flextable.
+
 Help file: https://cran.r-project.org/web/packages/captioner/vignettes/using_captioner.html
 
 
@@ -82,4 +84,26 @@ ft
 ft <- regulartable(head(iris)) 
 ft <- autofit(ft, add_w = 2)
 align_text_col(ft, align = "left")
+
+
+```
+
+
+`r table_nums(name = "QALYs", caption = "Cumulative difference in QALYs.")`
+```{r table3, eval = T, out.extra = '', warning = FALSE, echo=F, cache = T}
+data <- fread("dist_effects_yll.csv", header = TRUE)
+data <- flextable(data)
+data <- merge_v(data, j = c("Sex"))
+data <- colformat_int(data, j = c("2035", "2091"),
+      big.mark = ",", na_str = "", prefix = "", suffix = "")
+
+data <- autofit(data, add_w = 2)
+
+
+data <- theme_vanilla(data)
+data
+#data <- fix_border_issues(data)
+#set_caption(data, "caption")
+
+
 ```
